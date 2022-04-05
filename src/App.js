@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react'
 import './App.css';
+import Counter from './Components/Counter';
+import axios from 'axios';
 
+
+const INITIAL_DEFAULT_VALUE =1;
 function App() {
+  const [count, setCount] = useState(INITIAL_DEFAULT_VALUE);
+
+  useEffect(() => {
+    getData()
+  }, []);
+
+  const getData = async() => {
+    const {data} = await axios.get('https://interview-8e4c5-default-rtdb.firebaseio.com/front-end/counter1.json');
+    if(data) setCount(data);
+    else setCount(INITIAL_DEFAULT_VALUE);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="counter">
+        <Counter
+          count={count}
+          setCount={setCount}
+        />
+        <p className='value-text'>Counter value : {count}</p>
+      </div>
     </div>
   );
 }
